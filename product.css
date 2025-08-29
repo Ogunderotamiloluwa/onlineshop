@@ -1,0 +1,261 @@
+.all {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* <- allow items to wrap */
+  width: 60%;
+  position: relative;
+  left: 5%;
+  gap: 2rem;
+  align-items: stretch; 
+  margin-top: 1%;
+}
+body{
+  background: linear-gradient(
+    45deg,
+    #1f1f1f 0%,
+    #3c392b 25%,
+    #443d2d 65%,
+    #4a4538 100%
+  );
+  min-height: 100vh;
+  margin: 0;
+}
+.headertxt{
+  display: flex;
+ position: relative;
+ right: 10%;
+  color: white;
+}
+.divheader{
+  display: flex;
+ width:53%;
+border-width: 1px;
+border-style: solid;
+border-color: gold;
+border-radius: 10px;
+ height: 10vh;
+  justify-content: center;
+align-items: center;
+margin-left: 6%;
+margin-top: 2%;
+
+
+}
+.Search{
+  height: 5vh;
+  border-radius: 10px;
+  border: none;
+  background-color: transparent;
+  border-width: 1px;
+border-style: solid;
+border-color: rgb(218, 216, 216);
+ display: flex;
+ position: relative;
+ right: 3%;
+ color: aliceblue;
+ 
+}
+input::placeholder {
+  color: white; /* This sets the color to red */
+}
+.Search:hover{
+border-color: white;
+}
+.headertxt2{
+  color: rgb(218, 216, 216); 
+  font-size: 1.1rem;
+   position: relative;
+ right: -2%;
+ color: aliceblue;
+}
+
+.headertxt3{
+   color: rgb(218, 216, 216); 
+  font-size: 1.2rem;
+   position: relative;
+ left: 10%;
+}
+
+.subdiv1{
+  width: 28.3%;
+  height: 60vh;
+ display: flex;
+ flex-direction: column;
+ /* border-width: 1px;
+ border-color:blue;
+ border-style: solid;
+ */
+}
+.divimage{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  position: relative;
+}
+.carthead {
+  display: flex;
+  color: white;
+  position: relative;
+  left: 6%;
+  cursor: pointer;
+}
+
+.Addtocarticon {
+  height: 6vh; /* This sets the container height */
+  display: flex;
+  position: relative;
+padding-left: 3%;
+}
+
+.Addtocarticon img {
+  height: 100%; /* This makes the image fill the container's height */
+  width: auto; /* This maintains the image's aspect ratio */
+}
+.divtext{
+  width: 100%;
+  height: 40vh;
+  margin-top: 5%;
+  align-items: stretch; 
+  margin-left: 2%;
+  gap: 2rem; /* spacing between divs */
+  align-items: stretch; /* or center if you prefer centered */
+}
+.image{
+  width: 100%;
+   height: 40vh;
+   border-radius: 10px;
+}
+.text1{
+  font-size: 1rem;
+  color:rgb(186, 186, 186);
+  display: flex;
+   margin-bottom: 3%;
+}
+.text2{
+  font-size: 1.5rem;
+font-weight: bolder;
+ margin-bottom: 3%;
+}
+.text3{
+  font-size: 1rem;
+color: rgb(225, 195, 28);
+ margin-bottom: 3%;
+}
+.number{
+  display: flex;
+  padding-left: 15%;
+  font-size: 1.3rem;
+   color: rgb(218, 216, 216); 
+}
+
+
+.addtocartbutton {
+   position: absolute;
+ width: 120px;
+left: 17%;
+height: 30px;
+cursor: pointer;
+ top: 90%;
+ border-radius: 15px;
+ border-width: 1px;
+ display: flex;
+ justify-content: center;
+align-items: center;
+}
+
+.divimage:hover>:not(:hover){
+  opacity: 0.3;
+  text-shadow: black;
+  text-shadow: 5px;
+  cursor: pointer;
+}
+.image:hover{
+  transform: scale(1.1);
+    position: relative;
+  transition: 0.5s ease;
+  cursor: pointer;
+   text-shadow: black;
+   border-color:gold ;
+   border-width: 1px;
+   border-style: solid; 
+}
+.addtocartbutton:hover{
+  border-color:rgb(182, 156, 10) ;
+   border-width: 1px;
+   border-style: solid; 
+}
+/* All your existing CSS code here... */
+
+@media (max-width: 600px) {
+  .all {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 70%;
+    position: relative;
+    left: 10%;
+    gap: 2rem;
+  }
+  
+  .subdiv1 {
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Start of the mobile-specific styling for the divheader */
+  .divheader {
+    width: 95%;
+    height: 10vh;
+    border-width: 2px;
+    border-style: solid;
+    border-color: gold;
+    border-radius: 10px;
+    margin-left: 1%;
+    margin-top: 2%;
+    align-items: center;
+    position: relative;
+    display: flex;
+    gap: 0.5rem;
+    position: static;
+  }
+
+  .headertxt {
+    position: static; /* Remove the absolute positioning to allow it to flow normally */
+    font-size: 1.3rem;
+   padding-left: 5%;
+  }
+
+  .headertxt2,
+  .headertxt3 {
+    display: none; /* Hide these text elements to save space on mobile */
+  }
+
+   .Search {
+    width: 40%; /* Use a percentage for a responsive width */
+    left: 6%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   min-width: 15vh;
+  }
+  .Addtocarticon:hover{
+    transition: 0.05s;
+   opacity: 0.7;
+  }
+  .number{
+  display: flex;
+  position: relative;
+right: 7%;
+  font-size: 1.3rem;
+   color: rgb(218, 216, 216); 
+}
+.carthead {
+  display: flex;
+  color: white;
+  position: relative;
+  cursor: pointer;
+}
+}
