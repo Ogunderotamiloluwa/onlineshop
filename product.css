@@ -1,261 +1,224 @@
-.all {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap; /* <- allow items to wrap */
-  width: 60%;
-  position: relative;
-  left: 5%;
-  gap: 2rem;
-  align-items: stretch; 
-  margin-top: 1%;
+/* General body and background */
+body {
+    background-color: black;
+    color: white; /* Make all text visible by default */
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
-body{
-  background: linear-gradient(
-    45deg,
-    #1f1f1f 0%,
-    #3c392b 25%,
-    #443d2d 65%,
-    #4a4538 100%
-  );
-  min-height: 100vh;
-  margin: 0;
-}
-.headertxt{
-  display: flex;
- position: relative;
- right: 10%;
-  color: white;
-}
-.divheader{
-  display: flex;
- width:53%;
-border-width: 1px;
-border-style: solid;
-border-color: gold;
-border-radius: 10px;
- height: 10vh;
-  justify-content: center;
-align-items: center;
-margin-left: 6%;
-margin-top: 2%;
 
 
+/* Glass effect for necessary elements */
+.divheader,
+.Search,
+.subdiv1 {
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.125);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 10px;
 }
-.Search{
-  height: 5vh;
-  border-radius: 10px;
-  border: none;
-  background-color: transparent;
-  border-width: 1px;
-border-style: solid;
-border-color: rgb(218, 216, 216);
- display: flex;
- position: relative;
- right: 3%;
- color: aliceblue;
- 
+
+/* Header styling */
+.divheader {
+    display: flex;
+    width: 53%;
+    height: 10vh;
+    justify-content: center;
+    align-items: center;
+    margin: 2% auto 0; /* Center the header */
+    padding: 0 1rem;
+    position: relative;
+    box-sizing: border-box;
 }
+
+.headertxt {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-right: auto; /* Push the other elements to the right */
+    padding-left: 1rem;
+}
+
+.Search {
+    height: 5vh;
+    border-radius: 10px;
+    border: none;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 0 10px;
+    color: white;
+    width: 25%; /* Stays as a percentage */
+    /* Remove min-width here for full scalability */
+}
+
 input::placeholder {
-  color: white; /* This sets the color to red */
-}
-.Search:hover{
-border-color: white;
-}
-.headertxt2{
-  color: rgb(218, 216, 216); 
-  font-size: 1.1rem;
-   position: relative;
- right: -2%;
- color: aliceblue;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.headertxt3{
-   color: rgb(218, 216, 216); 
-  font-size: 1.2rem;
-   position: relative;
- left: 10%;
+.Search:hover {
+    border-color: white;
 }
 
-.subdiv1{
-  width: 28.3%;
-  height: 60vh;
- display: flex;
- flex-direction: column;
- /* border-width: 1px;
- border-color:blue;
- border-style: solid;
- */
+.headertxt2,
+.headertxt3,
+.number {
+    color: white;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
 }
-.divimage{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  height: 60vh;
-  position: relative;
-}
+
 .carthead {
-  display: flex;
-  color: white;
-  position: relative;
-  left: 6%;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-left: 1rem;
 }
 
 .Addtocarticon {
-  height: 6vh; /* This sets the container height */
-  display: flex;
-  position: relative;
-padding-left: 3%;
+    height: 6vh;
+    padding-right: 5px;
 }
 
-.Addtocarticon img {
-  height: 100%; /* This makes the image fill the container's height */
-  width: auto; /* This maintains the image's aspect ratio */
-}
-.divtext{
-  width: 100%;
-  height: 40vh;
-  margin-top: 5%;
-  align-items: stretch; 
-  margin-left: 2%;
-  gap: 2rem; /* spacing between divs */
-  align-items: stretch; /* or center if you prefer centered */
-}
-.image{
-  width: 100%;
-   height: 40vh;
-   border-radius: 10px;
-}
-.text1{
-  font-size: 1rem;
-  color:rgb(186, 186, 186);
-  display: flex;
-   margin-bottom: 3%;
-}
-.text2{
-  font-size: 1.5rem;
-font-weight: bolder;
- margin-bottom: 3%;
-}
-.text3{
-  font-size: 1rem;
-color: rgb(225, 195, 28);
- margin-bottom: 3%;
-}
-.number{
-  display: flex;
-  padding-left: 15%;
-  font-size: 1.3rem;
-   color: rgb(218, 216, 216); 
+.carthead img {
+    height: 100%;
 }
 
+.number {
+    padding-left: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* Product grid and items */
+.all {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    width: 90%;
+    margin: 2rem auto;
+}
+
+.subdiv1 {
+    width: 280px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.divimage {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.5s ease;
+}
+
+.divimage:hover .image {
+    transform: scale(1.05);
+}
+
+.divimage:hover .addtocartbutton {
+    opacity: 1;
+    top: 50%;
+}
 
 .addtocartbutton {
-   position: absolute;
- width: 120px;
-left: 17%;
-height: 30px;
-cursor: pointer;
- top: 90%;
- border-radius: 15px;
- border-width: 1px;
- display: flex;
- justify-content: center;
-align-items: center;
-}
-
-.divimage:hover>:not(:hover){
-  opacity: 0.3;
-  text-shadow: black;
-  text-shadow: 5px;
-  cursor: pointer;
-}
-.image:hover{
-  transform: scale(1.1);
-    position: relative;
-  transition: 0.5s ease;
-  cursor: pointer;
-   text-shadow: black;
-   border-color:gold ;
-   border-width: 1px;
-   border-style: solid; 
-}
-.addtocartbutton:hover{
-  border-color:rgb(182, 156, 10) ;
-   border-width: 1px;
-   border-style: solid; 
-}
-/* All your existing CSS code here... */
-
-@media (max-width: 600px) {
-  .all {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    width: 70%;
-    position: relative;
-    left: 10%;
-    gap: 2rem;
-  }
-  
-  .subdiv1 {
-    width: 100%;
-    height: 60vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Start of the mobile-specific styling for the divheader */
-  .divheader {
-    width: 95%;
-    height: 10vh;
-    border-width: 2px;
-    border-style: solid;
-    border-color: gold;
-    border-radius: 10px;
-    margin-left: 1%;
-    margin-top: 2%;
-    align-items: center;
-    position: relative;
-    display: flex;
-    gap: 0.5rem;
-    position: static;
-  }
-
-  .headertxt {
-    position: static; /* Remove the absolute positioning to allow it to flow normally */
-    font-size: 1.3rem;
-   padding-left: 5%;
-  }
-
-  .headertxt2,
-  .headertxt3 {
-    display: none; /* Hide these text elements to save space on mobile */
-  }
-
-   .Search {
-    width: 40%; /* Use a percentage for a responsive width */
-    left: 6%;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 35px;
+    cursor: pointer;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
-   min-width: 15vh;
-  }
-  .Addtocarticon:hover{
-    transition: 0.05s;
-   opacity: 0.7;
-  }
-  .number{
-  display: flex;
-  position: relative;
-right: 7%;
-  font-size: 1.3rem;
-   color: rgb(218, 216, 216); 
+    color: white;
+    font-weight: bold;
+    opacity: 0;
+    transition: top 0.5s ease, opacity 0.5s ease;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
-.carthead {
-  display: flex;
-  color: white;
-  position: relative;
-  cursor: pointer;
+
+.addtocartbutton img {
+    height: 20px;
+    margin-right: 5px;
 }
+
+.addtocartbutton:hover {
+    border-color: gold;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Text content */
+.divtext {
+    width: 100%;
+    padding-top: 1rem;
+}
+
+.text1 {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.text2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.text3 {
+    font-size: 1rem;
+    color: gold;
+    font-weight: bold;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .divheader {
+        width: 95%;
+        margin-left: 2%;
+        gap: 0.5rem;
+    }
+
+    .headertxt {
+        font-size: 1.3rem;
+    }
+
+    .headertxt2,
+    .headertxt3 {
+        display: none;
+    }
+
+    .Search {
+        width: 40%;
+    
+    }
+
+    .all {
+        width: 95%;
+    }
+
+    .subdiv1 {
+        width: 100%;
+    }
 }

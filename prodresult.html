@@ -1,58 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="productresult.css" />
 </head>
-<link rel="stylesheet" href="productresult.css" />
 <body>
-<div style="width: 10%;">
-  <a href="product.html" style="color: inherit;text-decoration: none;">
-          <h1 class="headertext">    
-            Desserts
-          </h1>
-  </a>
-</div>
-
-  <h2 class=" Reviewyourorder ">
-    Review your order 
-  </h2>
-
-
-
-  <div class="all" >
-
-  <div class="all1  js-order-summary "    >
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="suball2">
- <h2 style="margin-left: 5%;">Order sumarry</h2>
-
- <div style="display: flex;flex-direction: row;">
-  <nav >items(3):</nav>
-   <nav >$42.75</nav>
+    <div style="width: 10%;">
+        <a href="index.html" style="color: inherit; text-decoration: none;">
+            <h1 class="headertext">
+                Desserts
+            </h1>
+        </a>
     </div>
-</div>
-  </div>
 
+    <h2 class="Reviewyourorder">
+        Review your order
+    </h2>
 
+    <div class="all">
+        <div class="js-order-summary">
+           
+        </div>
 
+        <div class="js-cart-summary">
+            <div class="order-summary-title">
+                Order Summary
+            </div>
+            <div class="payment-summary-row">
+                <div>Items (subtotal):</div>
+                <div class="payment-price js-payment-item-price">
+                    $0.00
+                </div>
+            </div>
+            <div class="payment-summary-row">
+                <div>Shipping & handling:</div>
+                <div class="payment-price js-payment-shipping-price">
+                    $0.00
+                </div>
+            </div>
+            <div class="payment-summary-row">
+                <div>Total before tax:</div>
+                <div class="payment-price js-payment-total-before-tax">
+                    $0.00
+                </div>
+            </div>
+            <div class="payment-summary-row payment-summary-row-final">
+                <div>Estimated tax (10%):</div>
+                <div class="payment-price js-payment-tax">
+                    $0.00
+                </div>
+            </div>
+            <div class="payment-summary-row payment-summary-row-final total-row">
+                <div>Order total:</div>
+                <div class="payment-price js-payment-total">
+                    $0.00
+                </div>
+            </div>
+            <button class="place-order-button">
+                Place Order
+            </button>
+        </div>
+    </div>
 
-
-</div>
-<script type="module" src="result.js"></script>
+    <script type="module" src="result.js"></script>
 </body>
 </html>
