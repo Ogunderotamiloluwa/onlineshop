@@ -27,16 +27,24 @@ savetolocalstorage()
 }
 
 export function removefromcart(productId){
-let newcart =[];
+  let newcart =[];
   cart.forEach((cartitem)=>{
     if (cartitem.productId !== productId){
      newcart.push(cartitem)
     }
   })
-cart=newcart;
-savetolocalstorage()
+  cart=newcart;
+  savetolocalstorage()
 }
 
-
-
-
+export function updateCartQuantity(productId, newQuantity) {
+  cart.forEach((cartitem) => {
+    if (cartitem.productId === productId) {
+      cartitem.quantity = newQuantity;
+      if (cartitem.quantity <= 0) {
+        removefromcart(productId);
+      }
+    }
+  });
+  savetolocalstorage();
+}

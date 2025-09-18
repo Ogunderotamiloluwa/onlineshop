@@ -1,8 +1,18 @@
-import { cart, removefromcart } from "./cart.js";
+import { cart, removefromcart, updateCartQuantity } from "./cart.js";
 import { product } from "./product-data.js";
+
+function updateItemsCount() {
+  let totalItems = 0;
+  cart.forEach((item) => {
+    totalItems += item.quantity;
+  });
+  const itemsCountText = totalItems === 1 ? '(1 item)' : `(${totalItems} items)`;
+  document.querySelector('.items-count').textContent = itemsCountText;
+}
 
 function renderordersummary() {
   let cartsummaryHtml = '';
+  updateItemsCount();
 
   cart.forEach((cartitem) => {
     const productId = cartitem.productId;
@@ -28,9 +38,13 @@ function renderordersummary() {
               <div class="suball1-details">
                 <div class="product-name">${matchingproduct.name2}</div>
                 <div class="product-price">$${(matchingproduct.pricecent / 100).toFixed(2)}</div>
-                <div class="quantity-text">Quantity: ${cartitem.quantity}</div>
+                <div class="quantity-container">
+                  <div class="quantity-text">Quantity: </div>
+                  <input type="number" class="quantity-input" value="${cartitem.quantity}" 
+                    min="0" max="99" data-product-id="${matchingproduct.id}">
+                </div>
                 <div class="action-links">
-                  <span class="update-delete-link update-quantity-link">Update</span>
+                  <span class="update-delete-link update-quantity-link" data-product-id="${matchingproduct.id}">Update</span>
                   <span class="update-delete-link delete-quantity-link" data-product-del="${matchingproduct.id}">Delete</span>
                 </div>
               </div>
@@ -75,6 +89,36 @@ function renderordersummary() {
         container.remove();
       }
       updatePaymentSummary();
+      updateItemsCount();
+    });
+  });
+
+  document.querySelectorAll('.update-quantity-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      const productId = Number(link.dataset.productId);
+      const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+      const newQuantity = Number(quantityInput.value);
+      
+      if (newQuantity >= 0 && newQuantity <= 99) {
+        updateCartQuantity(productId, newQuantity);
+        if (newQuantity === 0) {
+          const container = document.querySelector(`.js-suball1-${productId}`);
+          if (container) {
+            container.remove();
+          }
+        }
+        updatePaymentSummary();
+        updateItemsCount();
+      }
+    });
+  });
+
+  // Add input event listener to quantity inputs
+  document.querySelectorAll('.quantity-input').forEach((input) => {
+    input.addEventListener('input', () => {
+      // Ensure the value stays within 0-99
+      if (input.value < 0) input.value = 0;
+      if (input.value > 99) input.value = 99;
     });
   });
 
