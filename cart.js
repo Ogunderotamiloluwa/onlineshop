@@ -1,10 +1,11 @@
+
 export let cart = JSON.parse(localStorage.getItem('cart'));
-if(!cart){
+if (!cart) {
   cart = [];
 }
 
-function savetolocalstorage(){
-  localStorage.setItem('cart',JSON.stringify(cart))
+function savetolocalstorage() {
+  localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 export function addtocart(productid) {
@@ -14,37 +15,58 @@ export function addtocart(productid) {
       matchingitem = cartitem;
     }
   });
-  
+
+  const defaultDeliveryOptionId = '1';
+
   if (matchingitem) {
     matchingitem.quantity += 1;
   } else {
     cart.push({
       productId: productid,
-      quantity: 1
+      quantity: 1,
+      deliveryOptionId: defaultDeliveryOptionId 
     });
   }
-savetolocalstorage()
+  savetolocalstorage();
 }
 
-export function removefromcart(productId){
-  let newcart =[];
-  cart.forEach((cartitem)=>{
-    if (cartitem.productId !== productId){
-     newcart.push(cartitem)
+export function removefromcart(productId) {
+  let newcart = [];
+  cart.forEach((cartitem) => {
+    if (cartitem.productId !== productId) {
+      newcart.push(cartitem);
     }
-  })
-  cart=newcart;
-  savetolocalstorage()
+  });
+  cart = newcart;
+  savetolocalstorage();
 }
 
 export function updateCartQuantity(productId, newQuantity) {
+  let itemFound = false;
   cart.forEach((cartitem) => {
     if (cartitem.productId === productId) {
-      cartitem.quantity = newQuantity;
-      if (cartitem.quantity <= 0) {
-        removefromcart(productId);
-      }
+      cartitem.quantity = Number(newQuantity);
+      itemFound = true;
     }
   });
-  savetolocalstorage();
+  if (itemFound) {
+    if (Number(newQuantity) <= 0) {
+      removefromcart(productId);
+    }
+    savetolocalstorage();
+  }
+}
+
+export function updateDeliveryOption(productId, deliveryOptionId) {
+  let matchingitem;
+  cart.forEach((cartitem) => {
+    if (cartitem.productId === productId) {
+      matchingitem = cartitem;
+    }
+  });
+
+  if (matchingitem) {
+    matchingitem.deliveryOptionId = deliveryOptionId;
+    savetolocalstorage();
+  }
 }
