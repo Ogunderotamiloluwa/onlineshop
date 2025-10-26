@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Transfer Details</title>
+    <link rel="stylesheet" href="productresult.css" /> 
+    <style>
+        /* Minimal, localized styles for the transfer page */
+        .transfer-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .bank-details p {
+            font-size: 1.1em;
+            margin: 10px 0;
+            text-align: left;
+            padding-left: 20%;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .receipt-upload {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+        .upload-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .upload-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="transfer-container">
+        <h1>Complete Your Transfer 💸</h1>
+        <p>Please transfer the total amount to the bank details below. **Your order will not be processed until the receipt is confirmed.**</p>
+        
+        <h2 style="margin-top: 30px;">Order Details</h2>
+        <p>Order ID: <span class="highlight js-order-id">#Loading...</span></p>
+        <p>Total Amount: <span class="highlight js-total-amount">$0.00</span></p>
+
+        <h2 style="margin-top: 30px;">Bank Transfer Information</h2>
+        <div class="bank-details">
+            <p>Bank Name: <span class="highlight">palm pay</span></p>
+            <p>Account Name: <span class="highlight">Desserts Online Store</span></p>
+            <p>Account Number: <span class="highlight">8103962047</span></p>
+            <p>SWIFT/BIC: <span class="highlight">GBLAXXX</span></p>
+        </div>
+
+        <div class="receipt-upload">
+            <h2>Upload Transfer Receipt</h2>
+            <form id="receipt-form">
+                <input type="file" id="receipt-file" accept="image/*,.pdf" required>
+                <button type="submit" class="upload-button">Submit Receipt</button>
+            </form>
+            <p id="upload-status" style="margin-top: 15px; color: green; display: none;">Receipt submitted successfully! We will verify your payment shortly.</p>
+            <a href="index.html" style="display: block; margin-top: 20px;">Return to Homepage</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('orderId');
+            const totalAmount = params.get('total');
+
+            document.querySelector('.js-order-id').textContent = orderId || 'N/A';
+            document.querySelector('.js-total-amount').textContent = `$${totalAmount || '0.00'}`;
+            
+            document.getElementById('receipt-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const fileInput = document.getElementById('receipt-file');
+                if (fileInput.files.length > 0) {
+                    
+                    document.getElementById('upload-status').style.display = 'block';
+                    document.getElementById('receipt-form').style.display = 'none'; 
+                    console.log(`Receipt for Order ID: ${orderId} has been submitted.`);
+                } else {
+                    alert('Please select a receipt file to upload.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -3,15 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
+    <title>Checkout - Order Review</title>
     <link rel="stylesheet" href="productresult.css" />
 </head>
+<style>
+    /* ------------------------------------------- */
+    /* Existing Styles */
+    /* ------------------------------------------- */
+    .payment-method-selection {
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px dashed #ccc; 
+    }
+    .payment-method-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .payment-option-label {
+        display: block;
+        margin-bottom: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .payment-option-label input[type="radio"] {
+        margin-right: 8px;
+    }
+
+    /* ------------------------------------------- */
+    /* Delivery Form Styles (Black Background, Glass Effect, Animations) */
+    /* ------------------------------------------- */
+
+    /* Animation Keyframes */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes slideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Black Background & Fade-In Animation for Modal Overlay */
+    .delivery-form-step {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85); 
+        display: none; /* Crucial: JS will change this to 'flex' or 'block' to show it */
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        overflow-y: auto; 
+        animation: fadeIn 0.3s ease-out; 
+    }
+    
+    /* Glass Effect and Slide-In Animation for Form Container */
+    .delivery-details-form-container {
+        /* Glass effect styles */
+        background-color: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px); 
+        -webkit-backdrop-filter: blur(10px); 
+        border: 1px solid rgba(255, 255, 255, 0.2); 
+        
+        padding: 40px; 
+        border-radius: 15px; 
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45); 
+        margin: 20px 0; 
+        position: relative; 
+
+        /* Animation */
+        animation: slideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        color: white; 
+    }
+
+    .delivery-details-form-container .order-summary-title {
+        text-align: center;
+        font-size: 26px; 
+        font-weight: 300;
+        margin-bottom: 30px; 
+        color: white; 
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+    
+    /* ------------------------------------------- */
+    /* ADVANCED FORM STYLES (Floating Labels) */
+    /* ------------------------------------------- */
+    .delivery-form .form-group {
+        margin-bottom: 25px; 
+        position: relative; 
+    }
+
+    .delivery-form label {
+        position: absolute;
+        top: 15px;
+        left: 12px;
+        font-size: 16px;
+        color: #ddd;
+        pointer-events: none; 
+        transition: 0.2s ease-out;
+        transform-origin: left top;
+        font-weight: 400; 
+    }
+    
+    .delivery-form input[type="text"],
+    .delivery-form input[type="tel"] {
+        width: 100%; 
+        padding: 18px 12px 6px 12px; 
+        height: 50px; 
+        font-size: 16px; 
+        background-color: rgba(255, 255, 255, 0.05); 
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px; 
+        box-sizing: border-box;
+        color: white;
+        transition: border-color 0.3s, background-color 0.3s;
+    }
+    
+    .delivery-form input[type="text"]:focus,
+    .delivery-form input[type="tel"]:focus {
+        border-color: #00bcd4; 
+        background-color: rgba(255, 255, 255, 0.1);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+    }
+    
+    .delivery-form input:focus + label,
+    .delivery-form input:not(:placeholder-shown) + label {
+        top: 4px; 
+        font-size: 10px; 
+        color: #00bcd4; 
+        transform: translateY(0) scale(1);
+    }
+
+    .delivery-form input::placeholder {
+        color: transparent; 
+    }
+
+    /* Button Styling */
+    .delivery-form button[type="submit"] {
+        width: 100%;
+        padding: 14px; 
+        margin-top: 30px; 
+        background-color: #00bcd4; 
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        transition: background-color 0.3s, transform 0.1s; 
+    }
+
+    .delivery-form button[type="submit"]:hover {
+        background-color: #0097a7; 
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 188, 212, 0.5);
+    }
+
+    /* ------------------------------------------- */
+    /* CANCEL BUTTON STYLES */
+    /* ------------------------------------------- */
+    .cancel-button {
+        position: absolute;
+        top: 10px; 
+        right: 10px; 
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.8); 
+        font-size: 24px; 
+        line-height: 1;
+        cursor: pointer;
+        padding: 5px;
+        transition: color 0.2s, transform 0.2s;
+        z-index: 10; 
+    }
+
+    .cancel-button:hover {
+        color: #ff4d4d; 
+        transform: rotate(90deg); 
+    }
+
+</style>
 <body>
     <div style="width: 10%;">
         <a href="index.html" style="color: inherit; text-decoration: none;">
-            <h1 class="headertext">
-                Desserts
-            </h1>
+            <h1 class="headertext">Desserts</h1>
         </a>
     </div>
 
@@ -20,50 +201,121 @@
     </h2>
 
     <div class="all">
-        <div class="js-order-summary">
-           
-        </div>
+        <div class="js-order-summary"></div> 
 
         <div class="js-cart-summary">
-            <div class="order-summary-title">
-                Order Summary
-            </div>
+            <div class="order-summary-title">Order Summary</div>
+            
             <div class="payment-summary-row">
                 <div>Items (subtotal):</div>
-                <div class="payment-price js-payment-item-price">
-                    $0.00
-                </div>
+                <div class="payment-price js-payment-item-price">$0.00</div>
             </div>
             <div class="payment-summary-row">
                 <div>Shipping & handling:</div>
-                <div class="payment-price js-payment-shipping-price">
-                    $0.00
-                </div>
+                <div class="payment-price js-payment-shipping-price">$0.00</div>
             </div>
             <div class="payment-summary-row">
                 <div>Total before tax:</div>
-                <div class="payment-price js-payment-total-before-tax">
-                    $0.00
-                </div>
+                <div class="payment-price js-payment-total-before-tax">$0.00</div>
             </div>
             <div class="payment-summary-row payment-summary-row-final">
                 <div>Estimated tax (10%):</div>
-                <div class="payment-price js-payment-tax">
-                    $0.00
-                </div>
+                <div class="payment-price js-payment-tax">$0.00</div>
             </div>
             <div class="payment-summary-row payment-summary-row-final total-row">
                 <div>Order total:</div>
-                <div class="payment-price js-payment-total">
-                    $0.00
-                </div>
+                <div class="payment-price js-payment-total">$0.00</div>
             </div>
-            <button class="place-order-button">
+
+            <div class="payment-method-selection">
+                <div class="order-summary-title payment-method-title">Select Payment Method</div>
+                <label class="payment-option-label">
+                    <input type="radio" name="payment-method" value="COD" checked class="js-payment-method" data-method="COD">
+                    Cash on Delivery (COD)
+                </label>
+                <label class="payment-option-label">
+                    <input type="radio" name="payment-method" value="Transfer" class="js-payment-method" data-method="Transfer">
+                    Bank Transfer
+                </label>
+            </div>
+            <button class="place-order-button js-place-order-button"> 
                 Place Order
             </button>
         </div>
     </div>
-   
+
+    <div class="delivery-form-step js-delivery-form-step" >
+        <div class="delivery-details-form-container">
+            <button class="cancel-button js-cancel-delivery-button" type="button" aria-label="Close form">
+                &times;
+            </button>
+            
+            <div class="order-summary-title">
+                Enter Delivery Details 🏡
+            </div>
+            <form id="delivery-form" class="delivery-form js-delivery-form">
+                <div class="form-group">
+                    <input type="text" id="fullName" name="fullName" required placeholder=" ">
+                    <label for="fullName">Full Name:</label>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" name="phone" required placeholder=" ">
+                    <label for="phone">Phone Number:</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="streetAddress" name="streetAddress" required placeholder=" ">
+                    <label for="streetAddress">Street Address / Location:</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="apartment" name="apartment" placeholder=" ">
+                    <label for="apartment">Apartment / Suite (Optional):</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="city" name="city" required placeholder=" ">
+                    <label for="city">City / Area:</label>
+                </div>
+                
+                <button type="submit">
+                    Confirm Address & Continue to Payment
+                </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // --- Place this code inside your result.js file ---
+
+// 1. Select the necessary elements using their classes
+const deliveryFormStep = document.querySelector('.js-delivery-form-step');
+const cancelButton = document.querySelector('.js-cancel-delivery-button');
+// You will also need to select the button that shows the form, 
+// likely the "Place Order" button, but that logic is outside this scope. 
+// const placeOrderButton = document.querySelector('.js-place-order-button');
+
+// 2. Define the function to hide the form
+function cancelDeliveryForm() {
+    // This hides the entire modal overlay, effectively canceling the process
+    if (deliveryFormStep) {
+        deliveryFormStep.style.display = 'none';
+    }
+}
+
+// 3. Attach the event listener to the Cancel button
+if (cancelButton) {
+    cancelButton.addEventListener('click', cancelDeliveryForm);
+}
+
+// NOTE: If you are showing the form using JavaScript, you would likely have a function 
+// similar to this, which you'd attach to the "Place Order" button:
+/*
+if (placeOrderButton) {
+    placeOrderButton.addEventListener('click', () => {
+        if (deliveryFormStep) {
+            deliveryFormStep.style.display = 'flex'; // or 'block'
+        }
+    });
+}
+*/
+    </script>
 <script type="module" src="result.js"></script>
 </body>
 </html>

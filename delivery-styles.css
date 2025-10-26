@@ -1,0 +1,147 @@
+/* ------------------------------------- */
+/* 1. Global & Background Styles (Set Black BG) */
+/* ------------------------------------- */
+body {
+    /* Set the background to black */
+    background-color: #000000;
+    color: #E0E0E0; /* Light gray text for contrast */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* ------------------------------------- */
+/* 2. Glassmorphism Container */
+/* ------------------------------------- */
+.delivery-container {
+    max-width: 600px;
+    width: 90%;
+    margin: 50px auto;
+    padding: 40px;
+    border-radius: 20px;
+    
+    /* Glass Effect properties */
+    background: rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4); 
+    /* The magic blur effect */
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px); 
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+
+    /* Animation: Fade in and slide down */
+    animation: fadeInSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    opacity: 0; /* Start hidden for animation */
+}
+
+.delivery-container .order-summary-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-shadow: 0 0 8px rgba(0, 191, 255, 0.6); /* Subtle blue neon glow */
+}
+
+/* ------------------------------------- */
+/* 3. Form & Input Styles + Animation */
+/* ------------------------------------- */
+.delivery-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #BBBBBB;
+    transition: color 0.3s;
+}
+
+.delivery-form input[type="text"],
+.delivery-form input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    box-sizing: border-box; 
+    background-color: rgba(255, 255, 255, 0.05); /* Very dark, transparent input */
+    color: #FFFFFF;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.delivery-form input:focus {
+    background-color: rgba(255, 255, 255, 0.15); /* Brighter on focus */
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.6); /* Blue glow on focus */
+    outline: none;
+    transform: scale(1.01); 
+}
+
+/* ------------------------------------- */
+/* 4. Button Styles & Animation */
+/* ------------------------------------- */
+.continue-button-container {
+    margin-top: 40px;
+    text-align: center;
+}
+.continue-to-checkout-button {
+    width: 100%;
+    background-color: #00bfff; /* Bright blue for action */
+    color: #111111;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4);
+}
+.continue-to-checkout-button:hover {
+    background-color: #00e0ff; /* Lighter on hover */
+    transform: translateY(-5px) scale(1.02); /* Lift and grow effect */
+    box-shadow: 0 10px 25px rgba(0, 191, 255, 0.8);
+}
+.continue-to-checkout-button:active {
+    transform: translateY(0); /* Press down effect */
+    box-shadow: 0 2px 10px rgba(0, 191, 255, 0.4);
+}
+
+/* ------------------------------------- */
+/* 5. Keyframe Animations */
+/* ------------------------------------- */
+
+@keyframes fadeInSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.delivery-form .form-group {
+    opacity: 0;
+    animation: formFadeIn 0.5s ease-out forwards;
+}
+
+/* Delay each form group slightly */
+.delivery-form .form-group:nth-child(1) { animation-delay: 0.2s; }
+.delivery-form .form-group:nth-child(2) { animation-delay: 0.3s; }
+.delivery-form .form-group:nth-child(3) { animation-delay: 0.4s; }
+.delivery-form .form-group:nth-child(4) { animation-delay: 0.5s; }
+.delivery-form .form-group:nth-child(5) { animation-delay: 0.6s; }
+
+@keyframes formFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
