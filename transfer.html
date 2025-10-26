@@ -31,17 +31,35 @@
             padding-top: 20px;
             border-top: 1px dashed #ccc;
         }
-        .upload-button {
-            background-color: #007bff;
-            color: white;
+        
+        /* Updated styles for both buttons */
+        .upload-button, .confirmation-button {
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        .upload-button {
+            background-color: #007bff;
+            color: white;
         }
         .upload-button:hover {
             background-color: #0056b3;
+        }
+        
+        /* SOLUTION: New style for the confirmation button */
+        .confirmation-button {
+            background-color: #28a745; /* A success color */
+            color: white;
+            margin-top: 20px; 
+            box-shadow: 0 2px 4px rgba(40, 167, 69, 0.5);
+        }
+        .confirmation-button:hover {
+            background-color: #1e7e34;
+            transform: translateY(-1px);
         }
     </style>
 </head>
@@ -68,7 +86,11 @@
                 <input type="file" id="receipt-file" accept="image/*,.pdf" required>
                 <button type="submit" class="upload-button">Submit Receipt</button>
             </form>
+            
             <p id="upload-status" style="margin-top: 15px; color: green; display: none;">Receipt submitted successfully! We will verify your payment shortly.</p>
+            
+            <button id="view-confirmation-button" class="confirmation-button" style="display: none;">View Order Confirmation</button>
+
             <a href="index.html" style="display: block; margin-top: 20px;">Return to Homepage</a>
         </div>
     </div>
@@ -78,10 +100,14 @@
             const params = new URLSearchParams(window.location.search);
             const orderId = params.get('orderId');
             const totalAmount = params.get('total');
+            
+            // Get the new button element
+            const confirmationButton = document.getElementById('view-confirmation-button');
 
             document.querySelector('.js-order-id').textContent = orderId || 'N/A';
             document.querySelector('.js-total-amount').textContent = `$${totalAmount || '0.00'}`;
             
+            // Handle Receipt Submission
             document.getElementById('receipt-form').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const fileInput = document.getElementById('receipt-file');
@@ -89,10 +115,21 @@
                     
                     document.getElementById('upload-status').style.display = 'block';
                     document.getElementById('receipt-form').style.display = 'none'; 
+                    
+                    // SOLUTION: Show the confirmation button after submission
+                    confirmationButton.style.display = 'block'; 
+
                     console.log(`Receipt for Order ID: ${orderId} has been submitted.`);
                 } else {
                     alert('Please select a receipt file to upload.');
                 }
+            });
+
+            // SOLUTION: Add event listener to the new button to redirect
+            confirmationButton.addEventListener('click', () => {
+                // Redirects to confirmation.html, preserving the order details in the URL
+                const redirectUrl = `confirmation.html?orderId=${orderId || ''}&total=${totalAmount || ''}`;
+                window.location.href = redirectUrl;
             });
         });
     </script>
