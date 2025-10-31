@@ -1,38 +1,102 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-<head> 
-  <meta charset="UTF-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <title>Dessert Products</title> 
-</head> 
-<link rel="stylesheet" href="product.css" /> 
-<body> 
-  <div class="divheader"> 
-    <h1 class="headertxt">Desserts</h1> 
-    <input placeholder="Search" class="Search"> 
-    <div class="headertxt2"> 
-      Returns<br> 
-      & Orders 
-    </div> 
-    <div class="carthead"> 
-      <a href="prodresult.html"> 
-        <img src="icon-add-to-cart.svg" class="Addtocarticon"> 
-      </a> 
-    </div> 
-    <nav class="headertxt3"> 
-      Cart 
-    </nav> 
-    <div class="number"> 
-      0 
-    </div> 
-  </div> 
-  
-  <div class="all js-product"></div> 
-  
-  <div class="js-loading-indicator" style="text-align: center; padding: 20px; font-size: 1.2em; display: none;">
-    Loading more desserts...
-  </div>
-  
-  <script type="module" src="amazon.js"></script> 
-</body> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Store</title>
+    <link rel="stylesheet" href="product.css" />
+</head>
+<body>
+    <div class="divheader">
+        <h1 class="headertxt">Products</h1>
+
+        <input placeholder="Search" class="Search">
+        
+        <div class="headertxt2">
+            Returns<br>
+            & Orders
+        </div>
+        
+        <div class="carthead">
+            <a href="prodresult.html">
+                <img src="icon-add-to-cart.svg" class="Addtocarticon">
+            </a>
+        </div>
+        
+        <nav class="headertxt3">
+            Cart
+        </nav>
+        
+        <div class="number">
+            0
+        </div>
+    </div>
+
+    <div class="mobile-menu-container">
+        <div class="js-mobile-menu-icon mobile-menu-icon">
+            <div class="dash"></div>
+            <div class="dash"></div>
+            <div class="dash"></div>
+        </div>
+    </div>
+    <div class="js-mobile-dashboard mobile-dashboard">
+        <div class="mobile-dashboard-header">
+            <span class="dashboard-title">Categories</span>
+            <div class="js-close-menu-icon close-menu-icon">
+                &times;
+            </div>
+        </div>
+        <div class="mobile-category-list">
+            <button class="category-button js-category-button mobile-category-button" data-category="All">All Products</button>
+            <button class="category-button js-category-button mobile-category-button" data-category="Cloth">Cloth</button>
+            <button class="category-button js-category-button mobile-category-button" data-category="Wrist Watch">Wrist Watch</button>
+            <button class="category-button js-category-button mobile-category-button" data-category="Jewelry">Jewelry</button>
+        </div>
+    </div>
+    
+    <div class="category-selection category-container desktop-categories">
+        <button class="category-button js-category-button" data-category="All">All Products</button>
+        <button class="category-button js-category-button" data-category="Cloth">Cloth</button>
+        <button class="category-button js-category-button" data-category="Wrist Watch">Wrist Watch</button>
+        <button class="category-button js-category-button" data-category="Jewelry">Jewelry</button>
+    </div>
+    
+    <div class="all js-product"></div>
+
+    <div class="js-loading-indicator" style="text-align: center; padding: 20px; font-size: 1.2em; display: none;">
+        Loading more products...
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuIcon = document.querySelector('.js-mobile-menu-icon');
+            const closeIcon = document.querySelector('.js-close-menu-icon');
+            const dashboard = document.querySelector('.js-mobile-dashboard');
+            const categoryButtons = document.querySelectorAll('.js-category-button');
+
+            // Open Dashboard
+            menuIcon.addEventListener('click', () => {
+                dashboard.classList.add('open');
+            });
+            
+            // Close Dashboard using 'X'
+            closeIcon.addEventListener('click', () => {
+                dashboard.classList.remove('open');
+            });
+            
+            // Close dashboard when a category button is clicked
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    console.log(`Product Filtered by: ${button.dataset.category}`); 
+                    
+                    if (dashboard.classList.contains('open')) {
+                            dashboard.classList.remove('open');
+                    }
+                });
+            });
+        });
+    </script>
+    
+    <script type="module" src="amazon.js"></script>
+</body>
 </html>

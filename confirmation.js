@@ -1,163 +1,164 @@
 // confirmation.js
+
+// Import dayjs for date formatting if needed (already imported in result.js but good practice here)
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js'; 
 
 /**
- * Utility to get URL parameters from the query string.
- * @param {string} name - The name of the parameter.
- * @returns {string | null}
+ * Gets a specific parameter value from the current URL query string.
+ * @param {string} name - The name of the parameter to get (e.g., 'orderId').
+ * @returns {string | null} The parameter value or null if not found.
  */
 function getUrlParam(name) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(name);
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
 }
 
-// ---------------------------------------------------------------------
-// NEW FUNCTION FOR TIME-BASED TRACKING PROGRESS
-// ---------------------------------------------------------------------
-
 /**
- * Calculates a time-based tracking percentage for a given item.
- * The progress increases day by day until the fixed delivery date.
- * @param {string} orderDateStr - The date the order was placed (e.g., "October 26, 2025 10:29 PM").
- * @param {string} deliveryDateStr - The fixed, estimated delivery date (e.g., "Thursday, November 7").
- * @returns {{percentage: number, label: string, status: string}}
+ * Calculates the progress percentage based on the tracking status.
+ * @param {string} status - The current tracking status.
+ * @returns {number} The progress percentage (0-100).
  */
-function calculateTimeBasedProgress(orderDateStr, deliveryDateStr) {
-  // 1. Define key dates
-  // dayjs is smart enough to parse the full 'MMMM D, YYYY h:mm A' order date string
-  const orderDate = dayjs(orderDateStr);
-  const currentDate = dayjs();
-  
-  // To parse the delivery date ('dddd, MMMM D'), we need to ensure it's referenced to the 
-  // correct year, especially if it's a cross-year delivery (e.g., Dec to Jan).
-  let deliveryDate = dayjs(deliveryDateStr, 'dddd, MMMM D');
-
-  // Simple fix: if the parsed delivery date is before the order date (meaning it defaulted 
-  // to the current year when it should be next year), adjust the year.
-  if (deliveryDate.isBefore(orderDate, 'day')) {
-      deliveryDate = deliveryDate.add(1, 'year');
-  }
-
-  // 2. Calculate time span and elapsed time
-  // Total milliseconds between order and delivery
-  const totalDurationMs = deliveryDate.diff(orderDate);
-  
-  // Elapsed milliseconds between order and now
-  const elapsedDurationMs = currentDate.diff(orderDate);
-  
-  // 3. Calculate percentage and status
-  let percentage = 0;
-  let status = 'Order Placed';
-  let label = 'Order Confirmed';
-
-  if (totalDurationMs > 0) {
-    percentage = (elapsedDurationMs / totalDurationMs) * 100;
-  }
-  
-  // Clamp the percentage between 0 and 100
-  percentage = Math.max(0, Math.min(100, percentage));
-
-  // Determine the status label based on progress
-  if (percentage >= 100) {
-      status = 'Delivered';
-      label = 'Delivered';
-      percentage = 100; // Ensure it's exactly 100 once "delivered"
-  } else if (percentage > 70) {
-      status = 'Shipped';
-      label = 'Out for Delivery';
-  } else if (percentage > 30) {
-      status = 'Processing';
-      label = 'Being Prepared';
-  }
-  
-  return { percentage: Math.round(percentage), label, status };
+function getProgressPercentage(status) {
+    switch (status) {
+        case 'Order Placed':
+            return 25;
+        case 'Shipped':
+            return 50;
+        case 'Out for Delivery':
+            return 75;
+        case 'Delivered':
+            return 100;
+        default:
+            return 0;
+    }
 }
 
-// NOTE: The original getTrackingProgress is no longer needed, it has been removed.
-
-// ---------------------------------------------------------------------
-// RENDER FUNCTION (MODIFIED)
-// ---------------------------------------------------------------------
-
 /**
- * Renders the order details and tracking status on the confirmation page.
+ * Generates the HTML content for the order confirmation page.
+ * @param {object} order - The complete order object.
+ * @returns {string} The full HTML string for the confirmation container.
  */
-function renderOrderConfirmation() {
-  const orderId = getUrlParam('orderId');
-  const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  // Find the order that was just placed
-  const order = orders.find(o => o.id === orderId);
-
-  // Assuming you have an empty div with class .js-order-confirmation-container 
-  // on your confirmation.html page
-  const container = document.querySelector('.js-order-confirmation-container');
-
-  if (!container) {
-    console.error("Confirmation container (.js-order-confirmation-container) not found.");
-    return;
-  }
-
-  if (!order) {
-    container.innerHTML = '<h1>Order Not Found 🙁</h1><p>We couldn\'t load the details for this order. Please check your order history or go back to <a href="index.html">shopping</a>.</p>';
-    return;
-  }
-
-  // --- HTML Generation for the Confirmation/Tracking Page ---
-  let itemsHtml = '';
-  
-  // Iterate through items to create an individual tracking bar for each
-  order.items.forEach(item => {
-    const productPrice = `$${(item.priceCent / 100).toFixed(2)}`;
+function generateConfirmationHTML(order) {
+    let itemsTrackingHTML = '';
     
-    // Use the new function to get the dynamic tracking progress
-    const tracking = calculateTimeBasedProgress(order.date, item.deliveryDate);
+    // Determine the overall status for the progress bar
+    const overallStatus = order.trackingStatus || 'Order Placed';
+    const progressPercent = getProgressPercentage(overallStatus);
+
+    // Generate HTML for each item in the order
+    order.items.forEach(item => {
+        // NOTE: In a real system, each item might have its own tracking status/delivery date.
+        // Here, we use the date/status saved when the order was placed.
+        itemsTrackingHTML += `
+            <div class="tracking-item-card">
+                <div class="tracking-item-image-container">
+                    <img src="${item.image}" alt="${item.name}" class="tracking-item-image">
+                </div>
+                <div>
+                    <div class="tracking-item-name">${item.name} (Qty: ${item.quantity})</div>
+                    <div class="delivery-date">Expected Delivery: ${item.deliveryDate}</div>
+                    <div style="margin-top: 5px; font-size: 0.9em; color: #999;">
+                        Price: $${(item.priceCent / 100).toFixed(2)} each
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    // Determine payment info
+    const paymentDisplay = order.paymentMethod === 'Transfer' ? 'Bank Transfer (Confirmed)' : 'Cash on Delivery (COD)';
     
-    itemsHtml += `
-      <div class="tracking-item-card">
-        <div class="tracking-item-image-container">
-          <img src="${item.image}" alt="${item.name}" class="tracking-item-image">
-        </div>
-        <div class="tracking-item-details">
-          <div class="tracking-item-name">${item.name}</div>
-          <div class="tracking-item-quantity">Quantity: ${item.quantity}</div>
-          <div class="tracking-item-price">${productPrice}</div>
-          <div class="tracking-item-delivery">Estimated Delivery: <strong class="delivery-date">${item.deliveryDate}</strong></div>
-          
-          <div class="item-tracking-section">
-            <div class="tracking-progress-bar">
-              <div class="progress-indicator" style="width: ${tracking.percentage}%;"></div>
-            </div>
-            <div class="tracking-status-label">
-              Status: <strong class="status-text">${tracking.label}</strong> (${tracking.percentage}%)
-            </div>
-          </div>
-          </div>
-      </div>
+    // Determine delivery address info
+    const deliveryAddress = `
+        ${order.deliveryInfo.streetAddress}, ${order.deliveryInfo.city} 
+        <br>Phone: ${order.deliveryInfo.phone}
     `;
-  });
 
-  const totalDisplay = `$${(order.totalCents / 100).toFixed(2)}`;
-  
-  const confirmationHtml = `
-    <h1>🎉 Order Confirmed!</h1>
-    <p class="summary-line">Thank you for your order. We've saved the details for your tracking!</p>
-    <p><strong>Order ID:</strong> <span class="order-id-display">${order.id}</span></p>
-    <p><strong>Order Date:</strong> ${dayjs(order.date).format('MMMM D, YYYY')}</p>
-    <p><strong>Total Charged:</strong> <span class="order-total-display">${totalDisplay}</span></p>
+    const totalDollars = (order.totalCents / 100).toFixed(2);
 
-    <div class="items-section">
-      <h2>Items Ordered (${order.items.length})</h2>
-      <div class="tracking-items-grid">
-        ${itemsHtml}
-      </div>
-    </div>
-    
-    <div class="return-home">
-      <a href="index.html" class="continue-shopping-link">⬅️ Continue Shopping</a>
-    </div>
-  `;
+    return `
+        <h1>✅ Order Placed Successfully!</h1>
+        <p class="summary-line">
+            Thank you for your order. A confirmation email has been sent to your address.
+        </p>
+        
+        <h2>Order Summary: #${order.id}</h2>
+        <p>Order Date: **${order.date}**</p>
+        <p>Payment Method: **${paymentDisplay}**</p>
+        <p>Delivery To: **${order.deliveryInfo.fullName}**</p>
+        <p style="margin-bottom: 20px;">Address: ${deliveryAddress}</p>
 
-  container.innerHTML = confirmationHtml;
+        <h2 style="color: #66ff99;">📦 Tracking Status</h2>
+        <div class="tracking-section">
+            <div class="tracking-status-label">
+                Current Status: <span class="status-text">${overallStatus}</span>
+            </div>
+            <div class="tracking-progress-bar">
+                <div class="progress-indicator" style="width: ${progressPercent}%"></div>
+            </div>
+
+            <p style="text-align: center; margin-top: 15px; font-style: italic; color: #999;">
+                The status below reflects the overall progress of your order.
+            </p>
+
+            <h3 style="margin-top: 25px; color: #E0E0E0;">Items in Order (${order.items.length})</h3>
+            <div class="tracking-items-grid">
+                ${itemsTrackingHTML}
+            </div>
+        </div>
+
+        <h2 style="margin-top: 30px;">💵 Final Total: <span class="order-total-display">$${totalDollars}</span></h2>
+
+        <div class="return-home">
+            <a href="index.html" class="continue-shopping-link">
+                Continue Shopping
+            </a>
+        </div>
+    `;
 }
 
-document.addEventListener('DOMContentLoaded', renderOrderConfirmation);
+/**
+ * Main function to load and display the order.
+ */
+function loadOrderConfirmation() {
+    const orderId = getUrlParam('orderId');
+    const container = document.querySelector('.js-order-confirmation-container');
+
+    if (!orderId) {
+        container.innerHTML = `
+            <div class="placeholder-content">
+                <h1>Error 🛑</h1>
+                <p>No Order ID found in the URL. Cannot display confirmation.</p>
+                <a href="index.html" class="continue-shopping-link" style="margin-top: 20px;">
+                    Go to Home Page
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    // Retrieve all orders from localStorage
+    const allOrders = JSON.parse(localStorage.getItem('orders')) || [];
+    
+    // Find the specific order
+    const order = allOrders.find(o => o.id === orderId);
+
+    if (order) {
+        // If order is found, display the detailed confirmation
+        container.innerHTML = generateConfirmationHTML(order);
+    } else {
+        // If order is not found
+        container.innerHTML = `
+            <div class="placeholder-content">
+                <h1>Order Not Found 🔍</h1>
+                <p>The order ID **#${orderId}** could not be found in our records.</p>
+                <a href="index.html" class="continue-shopping-link" style="margin-top: 20px;">
+                    Go to Home Page
+                </a>
+            </div>
+        `;
+    }
+}
+
+// Execute the main function when the script runs
+document.addEventListener('DOMContentLoaded', loadOrderConfirmation);

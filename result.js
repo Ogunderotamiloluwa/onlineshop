@@ -413,3 +413,7 @@ function attachEventListeners() {
 
 // Initial render
 renderOrderSummary();
+
+
+
+  
