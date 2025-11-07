@@ -1,5 +1,5 @@
 /* * PRODUCT.CSS - Comprehensive Stylesheet 
- * FINAL VERSION with Mobile Menu Bottom Placement and Performance Optimizations
+ * FINAL VERSION with Mobile Menu Bottom Placement, Responsive Header, and Performance Optimizations
  */
 
 /* ------------------------------------- */
@@ -30,7 +30,6 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     border-radius: 12px;
-    /* OPTIMIZATION: Hint the browser to prepare for animation */
     will-change: transform, opacity, box-shadow; 
 }
 
@@ -65,6 +64,7 @@ body {
     margin: 0 auto 15px; 
     padding: 0 1rem; 
     box-sizing: border-box;
+    z-index: 900; 
 }
 
 .headertxt {
@@ -75,11 +75,25 @@ body {
     flex-shrink: 0;
 }
 
+/* Desktop/Tablet Group (Returns/Orders, Cart, Number) */
 .header-info-group {
     display: flex;
     align-items: center;
     flex-shrink: 0; 
     gap: 10px;
+}
+
+/* Mobile Cart Group (Cart Icon + Number ONLY) */
+.mobile-cart-group {
+    display: none; /* Hidden by default on desktop/tablet */
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.mobile-number {
+    font-size: 1.1rem;
+    padding-right: 5px;
 }
 
 .Search {
@@ -196,14 +210,13 @@ input::placeholder {
 
 .mobile-dashboard {
     position: fixed;
-    top: auto; /* IMPORTANT: Unset top */
-    bottom: 0; /* Anchor to the bottom */
+    top: auto; 
+    bottom: 0; 
     left: 0;
-    width: 100%; /* Full width bottom sheet */
-    height: 65vh; /* Height of the menu panel */
+    width: 100%; 
+    height: 65vh; 
     max-height: 400px; 
     z-index: 1000;
-    /* Start off-screen by translating DOWN 100% of its own height */
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     background-color: rgba(0, 0, 0, 0.95);
@@ -213,7 +226,6 @@ input::placeholder {
 }
 
 .mobile-dashboard.open {
-    /* Slide in by returning to original position (translateY(0)) */
     transform: translateY(0);
 }
 
@@ -329,21 +341,19 @@ input::placeholder {
     position: relative;
     overflow: hidden;
     border-radius: 10px;
-    /* 💥 PERFORMANCE FIX: Enforce 1:1 aspect ratio before image loads (padding hack) */
     height: 0; 
-    padding-bottom: 71.4%; /* Based on 280px card width and 200px image height */
+    padding-bottom: 71.4%; 
 }
 
 .image {
     width: 100%;
-    height: 100%; /* Fill the padded parent container */
-    position: absolute; /* Positioned relative to .divimage */
+    height: 100%; 
+    position: absolute; 
     top: 0;
     left: 0;
     object-fit: cover;
     border-radius: 10px;
     transition: transform 0.5s ease;
-    /* OPTIMIZATION: Allows browser to skip rendering if not visible */
     content-visibility: auto;
 }
 
@@ -931,6 +941,19 @@ input::placeholder {
         position: sticky; 
         top: 10px; 
         z-index: 900; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* HIDE the full desktop group */
+    .header-info-group {
+        display: none; 
+    }
+    
+    /* SHOW the mobile cart group */
+    .mobile-cart-group {
+        display: flex; /* Show the minimal cart/number on mobile */
+        order: 3; /* Put cart group last in the flex container */
     }
 
     /* MOBILE MENU ICON: Fixed to the BOTTOM-RIGHT corner */
@@ -955,17 +978,16 @@ input::placeholder {
     .headertxt {
         font-size: 1.3rem;
         padding-left: 0.5rem;
+        order: 1; /* Put title first */
     }
 
     .Search {
         margin-left: auto; 
         margin-right: 0.5rem; 
-        flex-grow: 0; 
+        flex-grow: 1; 
         width: 45%;
-    }
-    
-    .header-info-group {
-        display: none; 
+        max-width: 250px; 
+        order: 2; /* Put search in the middle */
     }
     
     .desktop-categories {
@@ -986,6 +1008,9 @@ input::placeholder {
         width: 100%; 
     }
     .Search {
-        width: 35%; 
+        width: 50%; 
+    }
+    .headertxt {
+        font-size: 1.2rem;
     }
 }
